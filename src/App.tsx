@@ -417,7 +417,7 @@ const PurchaseOrderDetail = () => {
                 </div>
 
                 {/* 应收费用 */}
-                <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden mt-4">
+                <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-visible mt-4">
                   <div className="px-5 py-3 border-b border-slate-100 flex items-center gap-2">
                     <div className="w-1 h-3.5 bg-blue-600 rounded-full" />
                     <h3 className="font-bold text-slate-800 text-sm">应收费用</h3>
@@ -455,7 +455,7 @@ const PurchaseOrderDetail = () => {
                       </div>
                     </div>
 
-                    <div className="border border-slate-200 rounded overflow-x-auto">
+                    <div className="border border-slate-200 rounded overflow-visible">
                       <table className="w-full text-left whitespace-nowrap text-xs">
                         <thead className="bg-slate-50 border-b border-slate-200 text-slate-500">
                           <tr>
@@ -463,7 +463,28 @@ const PurchaseOrderDetail = () => {
                             <th className="p-2">移动</th>
                             <th className="p-2 font-semibold text-slate-700">付款方</th>
                             <th className="p-2 font-semibold text-slate-700">费用项</th>
-                            <th className="p-2">状态</th>
+                            <th className="p-2">
+                              <div className="relative group/status inline-flex items-center gap-1 cursor-help">
+                                状态 <HelpCircle size={12} className="text-slate-400" />
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[180px] bg-white border border-slate-200 shadow-xl rounded py-3 px-3 hidden group-hover/status:block z-[99999] font-normal text-left normal-case tracking-normal">
+                                  <div className="text-slate-700 font-bold mb-2 flex items-center gap-1.5 text-[13px]"><div className="w-0.5 h-3 bg-blue-500 rounded" />主状态</div>
+                                  <div className="flex gap-1.5 mb-3 text-slate-600 text-[11px] whitespace-nowrap">
+                                    <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 bg-slate-500 rounded-sm" />未完结</div>
+                                    <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 bg-orange-500 rounded-sm" />部分完结</div>
+                                    <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 bg-green-500 rounded-sm" />已完结</div>
+                                  </div>
+                                  <div className="space-y-1.5 text-slate-600 text-xs mb-3">
+                                      <div className="flex items-center gap-2"><span className="w-4 h-4 bg-slate-100 text-slate-400 text-[10px] rounded leading-none flex items-center justify-center">结</span>收付款结清</div>
+                                      <div className="flex items-center gap-2"><span className="w-4 h-4 bg-slate-100 text-slate-400 text-[10px] rounded leading-none flex items-center justify-center">账</span>制作账单</div>
+                                      <div className="flex items-center gap-2"><span className="w-4 h-4 bg-slate-100 text-slate-400 text-[10px] rounded leading-none flex items-center justify-center">申</span>收付款申请</div>
+                                  </div>
+                                  <div className="text-slate-700 font-bold mb-2 flex items-center gap-1.5 text-[13px]"><div className="w-0.5 h-3 bg-blue-500 rounded" />辅助状态</div>
+                                  <div className="flex items-center gap-2 text-slate-600 text-xs">
+                                      <span className="w-4 h-4 bg-green-50 text-green-500 border border-green-200 text-[10px] rounded leading-none flex items-center justify-center">调</span>费用调整审核中
+                                  </div>
+                                </div>
+                              </div>
+                            </th>
                             <th className="p-2 font-semibold text-slate-700 border-b-2 border-emerald-500 bg-emerald-50/50">费项金额</th>
                             <th className="p-2 font-semibold text-slate-700 bg-yellow-50/50">折算汇率</th>
                             <th className="p-2 font-semibold text-slate-700 border-b-2 border-yellow-400 bg-yellow-50/50">折算金额</th>
@@ -569,7 +590,7 @@ const PurchaseOrderDetail = () => {
                 </div>
 
                 {/* 应付费用 */}
-                <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-hidden mt-4">
+                <div className="bg-white border border-slate-200 rounded-xl shadow-sm overflow-visible mt-4">
                   <div className="px-5 py-3 border-b border-slate-100 flex items-center gap-2">
                     <div className="w-1 h-3.5 bg-blue-600 rounded-full" />
                     <h3 className="font-bold text-slate-800 text-sm">应付费用</h3>
@@ -609,7 +630,7 @@ const PurchaseOrderDetail = () => {
                       </div>
                     </div>
 
-                    <div className="border border-slate-200 rounded overflow-x-auto">
+                    <div className="border border-slate-200 rounded overflow-visible">
                       <table className="w-full text-left whitespace-nowrap text-xs">
                         <thead className="bg-slate-50 border-b border-slate-200 text-slate-500">
                           <tr>
@@ -617,7 +638,28 @@ const PurchaseOrderDetail = () => {
                             <th className="p-2">移动</th>
                             <th className="p-2 font-semibold text-slate-700">收款方</th>
                             <th className="p-2 font-semibold text-slate-700">费用项</th>
-                            <th className="p-2">状态</th>
+                            <th className="p-2">
+                              <div className="relative group/status inline-flex items-center gap-1 cursor-help">
+                                状态 <HelpCircle size={12} className="text-slate-400" />
+                                <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-[180px] bg-white border border-slate-200 shadow-xl rounded py-3 px-3 hidden group-hover/status:block z-[99999] font-normal text-left normal-case tracking-normal">
+                                  <div className="text-slate-700 font-bold mb-2 flex items-center gap-1.5 text-[13px]"><div className="w-0.5 h-3 bg-blue-500 rounded" />主状态</div>
+                                  <div className="flex gap-1.5 mb-3 text-slate-600 text-[11px] whitespace-nowrap">
+                                    <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 bg-slate-500 rounded-sm" />未完结</div>
+                                    <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 bg-orange-500 rounded-sm" />部分完结</div>
+                                    <div className="flex items-center gap-1"><div className="w-2.5 h-2.5 bg-green-500 rounded-sm" />已完结</div>
+                                  </div>
+                                  <div className="space-y-1.5 text-slate-600 text-xs mb-3">
+                                      <div className="flex items-center gap-2"><span className="w-4 h-4 bg-slate-100 text-slate-400 text-[10px] rounded leading-none flex items-center justify-center">结</span>收付款结清</div>
+                                      <div className="flex items-center gap-2"><span className="w-4 h-4 bg-slate-100 text-slate-400 text-[10px] rounded leading-none flex items-center justify-center">账</span>制作账单</div>
+                                      <div className="flex items-center gap-2"><span className="w-4 h-4 bg-slate-100 text-slate-400 text-[10px] rounded leading-none flex items-center justify-center">申</span>收付款申请</div>
+                                  </div>
+                                  <div className="text-slate-700 font-bold mb-2 flex items-center gap-1.5 text-[13px]"><div className="w-0.5 h-3 bg-blue-500 rounded" />辅助状态</div>
+                                  <div className="flex items-center gap-2 text-slate-600 text-xs">
+                                      <span className="w-4 h-4 bg-green-50 text-green-500 border border-green-200 text-[10px] rounded leading-none flex items-center justify-center">调</span>费用调整审核中
+                                  </div>
+                                </div>
+                              </div>
+                            </th>
                             <th className="p-2 font-semibold text-slate-700 border-b-2 border-emerald-500 bg-emerald-50/50">费项金额</th>
                             <th className="p-2 font-semibold text-slate-700 bg-yellow-50/50">折算汇率</th>
                             <th className="p-2 font-semibold text-slate-700 border-b-2 border-yellow-400 bg-yellow-50/50">折算金额</th>
@@ -1773,7 +1815,7 @@ export default function App() {
               {isSidebarCollapsed ? <ChevronRight size={14} className="-ml-1" /> : <ChevronLeft size={14} className="-ml-1" />}
             </div>
 
-            <div className="w-[320px] bg-white flex flex-col h-full absolute top-0 left-0 overflow-hidden">
+            <div className={`w-[320px] bg-white flex flex-col h-full absolute top-0 left-0 overflow-hidden transition-all duration-300 ease-in-out ${isSidebarCollapsed ? "-translate-x-full opacity-0 pointer-events-none delay-0" : "translate-x-0 opacity-100 delay-100"}`}>
               <div className="p-4 border-b border-slate-200 flex justify-between items-center text-slate-700 font-bold uppercase tracking-wider text-xs">
               <div className="flex items-center gap-2">
                 <div className="w-1.5 h-4 bg-blue-600 rounded-full"></div>
@@ -2786,7 +2828,7 @@ export default function App() {
                   </div>
 
                   {/* Receivable Table */}
-                  <div className="overflow-x-auto rounded-b-xl relative z-10">
+                  <div className="overflow-visible rounded-b-xl relative z-10">
                     <table className="w-full text-left border-collapse text-xs whitespace-nowrap">
                       <thead className="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-200">
                         <tr>
@@ -2803,10 +2845,10 @@ export default function App() {
                               className="inline text-slate-400 ml-1"
                             />
                           </th>
-                          <th className="p-3 border-r border-slate-100 w-48">
+                          <th className="p-3 border-r border-slate-100 w-36">
                             <span className="text-blue-600 mr-1">*</span>付款方
                           </th>
-                          <th className="p-3 border-r border-slate-100 w-40">
+                          <th className="p-3 border-r border-slate-100 w-32">
                             <span className="text-blue-600 mr-1">*</span>费用项
                           </th>
                           <th className="p-3 border-r border-slate-100 w-28">
@@ -2829,16 +2871,19 @@ export default function App() {
                               className="inline text-slate-400 ml-1"
                             />
                           </th>
-                          <th className="p-3 border-r border-slate-100 w-40 border-b-2 border-b-yellow-400 font-black text-slate-700 bg-yellow-50/30">
+                          <th className="p-3 border-r border-slate-100 w-52 border-b-2 border-b-yellow-400 font-black text-slate-700 bg-yellow-50/30">
                             折算金额
+                          </th>
+                          <th className="p-3 border-r border-slate-100 w-32">
+                            代付收款方
                           </th>
                           <th className="p-3 border-r border-slate-100 w-40">
                             业务发生日期
                           </th>
                           <th className="p-3 border-r border-slate-100 w-32">
-                            费用备注
+                            费项备注
                           </th>
-                          <th className="p-3">费项附件</th>
+                          <th className="p-3 sticky right-0 bg-[#F8FAFC] border-l border-slate-200 shadow-[-2px_0_4px_rgba(0,0,0,0.03)] z-10 w-[72px] text-center">费项附件</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 text-slate-700 bg-white">
@@ -2849,10 +2894,10 @@ export default function App() {
                             <tr
                               key={item.id}
                               id={`receivable-row-${item.id}`}
-                              className={`transition-all duration-500 ${
+                              className={`transition-all duration-500 group ${
                                 isHighlighted 
                                   ? "bg-yellow-50/80 ring-2 ring-yellow-400 font-semibold scale-[1.002] shadow-sm relative z-20" 
-                                  : "hover:bg-blue-50/30"
+                                  : "hover:bg-blue-50/30 bg-white"
                               }`}
                             >
                               <td className="p-3 text-center border-r border-slate-100">
@@ -2868,11 +2913,14 @@ export default function App() {
                                 />
                               </td>
                               <td className="p-3 border-r border-slate-100 min-w-[120px]">
-                                {renderParty(item.payer)}
+                                <div className="flex items-center justify-between border border-slate-200 rounded px-2 py-1.5 cursor-pointer bg-white">
+                                  {renderParty(item.payer)}
+                                  <ChevronDown size={14} className="text-slate-400" />
+                                </div>
                               </td>
-                              <td className="p-3 border-r border-slate-100 hover:relative hover:z-50">
+                              <td className="p-3 border-r border-slate-100 hover:relative hover:z-50 min-w-[120px]">
                                 {item.name === "尾款" ? (
-                                  <div className="flex items-center justify-between border border-slate-200 rounded px-2 py-1.5 cursor-pointer hover:bg-slate-50 transition">
+                                  <div className="flex items-center justify-between border border-slate-200 bg-slate-50/50 rounded px-2 py-1.5 cursor-pointer">
                                     <div className="flex items-center space-x-2">
                                       <span className="font-semibold text-slate-900">
                                         {item.name}
@@ -2889,7 +2937,7 @@ export default function App() {
                                     />
                                   </div>
                                 ) : (
-                                  <div className="flex items-center justify-between border border-transparent hover:border-slate-200 rounded px-2 py-1.5 cursor-pointer">
+                                  <div className="flex items-center justify-between border border-slate-200 bg-white rounded px-2 py-1.5 cursor-pointer">
                                     <div className="flex items-center space-x-2">
                                       <span className="font-semibold text-slate-900">
                                         {item.name}
@@ -2917,8 +2965,8 @@ export default function App() {
                                   </div>
                                 )}
                               </td>
-                              <td className="p-3 border-r border-slate-100">
-                                <div className="flex items-center justify-between text-slate-700 hover:bg-slate-100 rounded px-2 py-1.5 cursor-pointer transition">
+                              <td className="p-3 border-r border-slate-100 min-w-[100px]">
+                                <div className="flex items-center justify-between text-slate-700 bg-white border border-slate-200 rounded px-2 py-1.5 cursor-pointer">
                                   <input
                                     type="text"
                                     value={item.unit}
@@ -2930,7 +2978,7 @@ export default function App() {
                                       )
                                     }
                                     placeholder="请选择"
-                                    className="w-full bg-transparent text-slate-700 font-semibold outline-none border-0 p-0 ring-0 focus:ring-0"
+                                    className="w-full bg-transparent text-slate-700 font-semibold outline-none border-0 p-0 ring-0 focus:ring-0 placeholder:font-normal"
                                   />
                                   <ChevronDown
                                     size={14}
@@ -2950,7 +2998,7 @@ export default function App() {
                                     )
                                   }
                                   placeholder="请输入"
-                                  className="w-16 px-1.5 py-1 text-right border border-transparent hover:border-slate-200 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 bg-transparent rounded outline-none font-mono text-slate-800"
+                                  className="w-20 px-2 py-1.5 bg-slate-50 border border-slate-200 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 rounded outline-none font-mono text-slate-800 placeholder:font-sans placeholder:font-normal"
                                 />
                               </td>
                               <td className="p-3 border-r border-slate-100">
@@ -2965,18 +3013,37 @@ export default function App() {
                                     )
                                   }
                                   placeholder="请输入"
-                                  className="w-16 px-1.5 py-1 text-right border border-transparent hover:border-slate-200 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 bg-transparent rounded outline-none font-mono text-slate-800"
+                                  className="w-20 px-2 py-1.5 bg-slate-50 border border-slate-200 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 rounded outline-none font-mono text-slate-800 placeholder:font-sans placeholder:font-normal"
                                 />
                               </td>
-                              <td className="p-3 border-r border-slate-100 hover:relative hover:z-50 text-right">
+                              <td className="p-3 border-r border-slate-100 min-w-[140px] hover:relative hover:z-50 text-right">
                                 {item.badge === "返利" ? (
                                   <div className="flex items-center justify-end gap-1.5 pb-1 select-none">
                                     <span className={`text-xs font-mono tracking-wide ${isOffsetCancelled ? "text-slate-800 font-bold" : "text-rose-600 font-extrabold"}`}>
                                       {getReceivableRowAmount(item).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </span>
-                                    <span className="text-[10px] font-bold text-slate-400 font-mono scale-90 pr-0.5">
-                                      {item.currency}
-                                    </span>
+                                    <div className="flex items-center text-slate-400 hover:text-slate-600 relative pr-3 shrink-0 scale-90">
+                                      <select
+                                        value={item.currency}
+                                        onChange={(e) =>
+                                          updateReceivableFee(
+                                            item.id,
+                                            "currency",
+                                            e.target.value
+                                          )
+                                        }
+                                        className="outline-none text-[11px] font-bold font-mono bg-transparent cursor-pointer appearance-none pr-1 border-0 focus:ring-0 p-0 m-0"
+                                      >
+                                        <option value="CNY">CNY</option>
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="HKD">HKD</option>
+                                      </select>
+                                      <ChevronDown
+                                        size={10}
+                                        className="absolute right-0 pointer-events-none"
+                                      />
+                                    </div>
                                     {isOffsetCancelled ? (
                                       <button
                                         onClick={(e) => {
@@ -3010,7 +3077,7 @@ export default function App() {
                                     )}
                                   </div>
                                 ) : (
-                                  <div className="flex items-center border-b border-slate-200 pb-1 group focus-within:border-blue-500 transition-colors">
+                                  <div className="flex items-center bg-white border border-slate-200 rounded group focus-within:border-blue-500 transition-colors h-[34px]">
                                     <input
                                       type="text"
                                       value={item.amount}
@@ -3021,9 +3088,9 @@ export default function App() {
                                           e.target.value
                                         )
                                       }}
-                                      className="w-full font-mono font-medium outline-none pr-1.5 bg-transparent border-0 p-0 text-right focus:ring-0 text-slate-900"
+                                      className="w-full font-mono font-medium outline-none px-2 bg-transparent border-0 text-left focus:ring-0 text-slate-900 h-full"
                                     />
-                                    <div className="flex items-center text-slate-500 border-l border-slate-200 pl-1.5 cursor-pointer hover:text-slate-700 relative pr-4 shrink-0">
+                                    <div className="flex items-center h-full bg-slate-50 text-slate-500 border-l border-slate-200 px-2 cursor-pointer hover:bg-slate-100 relative shrink-0">
                                       <select
                                         value={item.currency}
                                         onChange={(e) =>
@@ -3033,27 +3100,27 @@ export default function App() {
                                             e.target.value
                                           )
                                         }
-                                        className="outline-none text-xs font-semibold text-slate-600 bg-transparent cursor-pointer appearance-none pr-1 border-0 focus:ring-0 py-0.5"
+                                        className="outline-none text-xs font-semibold text-slate-600 bg-transparent cursor-pointer appearance-none pr-3 border-0 focus:ring-0 h-full w-full absolute inset-0 opacity-0"
                                       >
                                         <option value="CNY">CNY</option>
                                         <option value="USD">USD</option>
                                         <option value="EUR">EUR</option>
                                         <option value="HKD">HKD</option>
                                       </select>
+                                      <span className="text-xs font-semibold text-slate-600 mr-1 select-none pointer-events-none">{item.currency}</span>
                                       <ChevronDown
-                                        size={11}
-                                        className="text-slate-400 absolute right-0 pointer-events-none"
+                                        size={12}
+                                        className="text-slate-400 pointer-events-none"
                                       />
                                     </div>
                                   </div>
                                 )}
                               </td>
-                              <td className="p-3 border-r border-slate-100">
-                                <div className="flex items-center space-x-1 border border-transparent hover:border-slate-200 focus-within:border-blue-400 rounded px-1 py-1">
-                                  <X
-                                    size={10}
-                                    className="text-green-500 font-bold shrink-0"
-                                  />
+                              <td className="p-3 border-r border-slate-100 min-w-[90px]">
+                                <div className="flex items-center bg-white border border-slate-200 focus-within:border-blue-400 rounded h-[34px]">
+                                  <div className="px-2 text-green-500 font-bold border-r border-slate-100 flex items-center justify-center shrink-0">
+                                    <X size={10} />
+                                  </div>
                                   <input
                                     type="text"
                                     value={item.rate}
@@ -3064,22 +3131,41 @@ export default function App() {
                                         e.target.value
                                       )
                                     }
-                                    className="w-10 bg-transparent text-slate-900 font-mono outline-none text-left p-0 border-none focus:ring-0 font-medium"
+                                    className="w-full bg-transparent px-2 text-slate-900 font-mono outline-none text-left border-none focus:ring-0 font-medium h-full"
                                   />
                                 </div>
                               </td>
-                              <td className="p-3 border-r border-slate-100 bg-yellow-50/20">
+                              <td className="p-3 border-r border-slate-100 min-w-[160px]">
                                 {item.badge === "返利" ? (
-                                  <div className="flex items-center justify-between px-2 py-1.5 transition-colors w-full select-none">
+                                  <div className="flex items-center justify-between pl-2 transition-colors w-full select-none h-full relative border border-transparent hover:border-slate-200 rounded">
                                     <span className="font-mono font-bold text-slate-800">
                                       {getReceivableRowConverted(item).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                                     </span>
-                                    <span className="text-[10px] font-black text-slate-950 uppercase pr-4">
-                                      {item.convertedCurrency || "CNY"}
-                                    </span>
+                                    <div className="flex items-center h-[34px] hover:bg-slate-100 rounded cursor-pointer relative px-2 shrink-0">
+                                      <select
+                                        value={item.convertedCurrency || "CNY"}
+                                        onChange={(e) =>
+                                          updateReceivableFee(
+                                            item.id,
+                                            "convertedCurrency",
+                                            e.target.value
+                                          )
+                                        }
+                                        className="outline-none text-[10px] font-black text-slate-900 bg-transparent cursor-pointer appearance-none border-0 focus:ring-0 py-0.5 uppercase h-full w-full absolute inset-0 opacity-0"
+                                      >
+                                        <option value="CNY">CNY</option>
+                                        <option value="USD">USD</option>
+                                        <option value="EUR">EUR</option>
+                                        <option value="HKD">HKD</option>
+                                      </select>
+                                      <span className="text-[10px] font-black text-slate-950 uppercase pr-1 pointer-events-none">
+                                        {item.convertedCurrency || "CNY"}
+                                      </span>
+                                      <ChevronDown size={10} className="text-slate-400 pointer-events-none" />
+                                    </div>
                                   </div>
                                 ) : (
-                                  <div className="flex items-center justify-between px-2 py-1 border border-transparent hover:border-slate-200 focus-within:border-blue-400 rounded transition-colors w-full">
+                                  <div className="flex items-center bg-white border border-slate-200 focus-within:border-blue-400 rounded transition-colors w-full h-[34px]">
                                     <input
                                       type="text"
                                       value={item.convertedAmount}
@@ -3090,9 +3176,9 @@ export default function App() {
                                           e.target.value
                                         )
                                       }
-                                      className="w-full font-mono font-bold text-slate-900 outline-none pr-1.5 bg-transparent border-none p-0 text-left focus:ring-0"
+                                      className="w-full font-mono px-2 font-medium text-slate-900 outline-none bg-transparent border-none text-left focus:ring-0 h-full"
                                     />
-                                    <div className="flex items-center text-slate-900 border-l border-slate-200 pl-1.5 cursor-pointer hover:text-slate-700 relative pr-4 shrink-0 font-bold ml-1">
+                                    <div className="flex items-center h-full bg-slate-50 text-slate-500 border-l border-slate-200 px-2 cursor-pointer hover:bg-slate-100 relative shrink-0 font-bold">
                                       <select
                                         value={item.convertedCurrency}
                                         onChange={(e) =>
@@ -3102,28 +3188,46 @@ export default function App() {
                                             e.target.value
                                           )
                                         }
-                                        className="outline-none text-[10px] font-black text-slate-900 bg-transparent cursor-pointer appearance-none pr-1 border-0 focus:ring-0 py-0.5 uppercase"
+                                        className="outline-none text-[10px] font-black text-slate-900 bg-transparent cursor-pointer appearance-none pr-3 border-0 focus:ring-0 py-0.5 uppercase h-full w-full absolute inset-0 opacity-0"
                                       >
                                         <option value="CNY">CNY</option>
                                         <option value="USD">USD</option>
                                         <option value="EUR">EUR</option>
                                         <option value="HKD">HKD</option>
                                       </select>
+                                      <span className="uppercase text-xs font-semibold text-slate-900 mr-1 select-none pointer-events-none">{item.convertedCurrency || "USD"}</span>
                                       <ChevronDown
-                                        size={11}
-                                        className="text-slate-400 absolute right-0 pointer-events-none"
+                                        size={12}
+                                        className="text-slate-400 pointer-events-none"
                                       />
                                     </div>
                                   </div>
                                 )}
                               </td>
-                              <td className="p-3 border-r border-slate-100 text-slate-400 flex items-center justify-between border border-transparent hover:border-slate-200 rounded px-2 py-1 cursor-pointer">
-                                <span className="text-slate-600">
-                                  {item.date}
-                                </span>{" "}
-                                <Calendar size={14} className="text-slate-400" />
+                              <td className="p-3 border-r border-slate-100 min-w-[130px]">
+                                <div className="flex items-center justify-between text-slate-700 bg-slate-50 border border-slate-200 rounded px-2 py-1.5 focus-within:border-blue-400">
+                                  {item.badge === "代付货款" ? (
+                                    <>
+                                      <input type="text" placeholder="请输入" className="w-full bg-transparent text-slate-600 outline-none border-none p-0 text-xs focus:ring-0 placeholder:font-normal" />
+                                      <span className="text-blue-500 hover:text-blue-600 cursor-pointer font-bold ml-1 shrink-0">选择</span>
+                                    </>
+                                  ) : (
+                                    <span className="text-slate-400 font-normal">--</span>
+                                  )}
+                                </div>
                               </td>
-                              <td className="p-3 border-r border-slate-100">
+                              <td className="p-3 border-r border-slate-100 min-w-[130px]">
+                                <div className="flex items-center justify-between bg-white border border-slate-200 text-slate-700 rounded px-2 py-1.5 cursor-pointer">
+                                  <input
+                                    type="text"
+                                    value={item.date}
+                                    readOnly
+                                    className="w-full bg-transparent text-slate-600 outline-none border-none p-0 text-xs focus:ring-0 cursor-pointer text-left"
+                                  />
+                                  <Calendar size={14} className="text-slate-400 ml-1 shrink-0" />
+                                </div>
+                              </td>
+                              <td className="p-3 border-r border-slate-100 min-w-[120px]">
                                 <input
                                   type="text"
                                   value={item.remark}
@@ -3135,14 +3239,11 @@ export default function App() {
                                     )
                                   }
                                   placeholder="请输入"
-                                  className="w-full px-2 py-1 border border-transparent hover:border-slate-200 focus:border-blue-400 rounded outline-none text-slate-700 placeholder-slate-300 text-left bg-transparent"
+                                  className="w-full px-2 py-1.5 border border-slate-200 bg-white focus:border-blue-400 rounded outline-none text-slate-700 placeholder:font-normal placeholder-slate-300 text-left"
                                 />
                               </td>
-                              <td className="p-3 font-medium flex items-center space-x-1">
-                                <Paperclip size={14} className="text-slate-400" />{" "}
-                                <span className="text-blue-600 hover:underline cursor-pointer">
-                                  {item.files}
-                                </span>
+                              <td className={`p-3 text-center sticky right-0 border-l border-slate-100 shadow-[-2px_0_4px_rgba(0,0,0,0.03)] z-10 ${isHighlighted ? "bg-[#FFFCEB]" : "bg-white group-hover:bg-[#FAFCFF]"} transition-colors duration-200`}>
+                                <span className="text-blue-500 hover:text-blue-600 text-xs cursor-pointer select-none">上传</span>
                               </td>
                             </tr>
                           );
@@ -3186,6 +3287,7 @@ export default function App() {
                               </span>
                             </div>
                           </td>
+                          <td className="p-4 border-t border-[#ffeb99] sticky right-0 bg-[#fff9e6] shadow-[-2px_0_4px_rgba(0,0,0,0.03)] z-10 border-l border-[#ffe47a]"></td>
                         </tr>
                       </tfoot>
                     </table>
@@ -3245,7 +3347,7 @@ export default function App() {
                   </div>
 
                   {/* Payable Table */}
-                  <div className="overflow-x-auto rounded-b-xl relative z-10">
+                  <div className="overflow-visible rounded-b-xl relative z-10">
                     <table className="w-full text-left border-collapse text-xs whitespace-nowrap">
                       <thead className="bg-slate-50/80 text-slate-500 font-bold border-b border-slate-200">
                         <tr>
@@ -3262,10 +3364,10 @@ export default function App() {
                               className="inline text-slate-400 ml-1"
                             />
                           </th>
-                          <th className="p-3 border-r border-slate-100 w-48">
+                          <th className="p-3 border-r border-slate-100 w-36">
                             <span className="text-blue-600 mr-1">*</span>收款方
                           </th>
-                          <th className="p-3 border-r border-slate-100 w-40">
+                          <th className="p-3 border-r border-slate-100 w-32">
                             <span className="text-blue-600 mr-1">*</span>费用项
                           </th>
                           <th className="p-3 border-r border-slate-100 w-28">
@@ -3288,13 +3390,19 @@ export default function App() {
                               className="inline text-slate-400 ml-1"
                             />
                           </th>
-                          <th className="p-3 border-r border-slate-100 w-40 border-b-2 border-b-yellow-400 font-black text-slate-700 bg-yellow-50/30">
+                          <th className="p-3 border-r border-slate-100 w-52 border-b-2 border-b-yellow-400 font-black text-slate-700 bg-yellow-50/30">
                             折算金额
+                          </th>
+                          <th className="p-3 border-r border-slate-100 w-32">
+                            代付委托方
                           </th>
                           <th className="p-3 border-r border-slate-100 w-40">
                             业务发生日期
                           </th>
-                          <th className="p-3">费项附件</th>
+                          <th className="p-3 border-r border-slate-100 w-32">
+                            费项备注
+                          </th>
+                          <th className="p-3 sticky right-0 bg-[#F8FAFC] border-l border-slate-200 shadow-[-2px_0_4px_rgba(0,0,0,0.03)] z-10 w-[72px] text-center">费项附件</th>
                         </tr>
                       </thead>
                       <tbody className="divide-y divide-slate-100 text-slate-700 bg-white">
@@ -3322,10 +3430,10 @@ export default function App() {
                             <tr
                               key={item.id}
                               id={`payable-row-${item.id}`}
-                              className={`transition-all duration-500 ${
+                              className={`transition-all duration-500 group ${
                                 isHighlighted 
                                   ? "bg-yellow-50/80 ring-2 ring-yellow-400 font-semibold scale-[1.002] shadow-sm relative z-20" 
-                                  : "hover:bg-blue-50/30"
+                                  : "hover:bg-blue-50/30 bg-white"
                               }`}
                             >
                               <td className="p-3 text-center border-r border-slate-100">
@@ -3340,11 +3448,14 @@ export default function App() {
                                   className="mx-auto cursor-grab hover:text-slate-500"
                                 />
                               </td>
-                              <td className="p-3 border-r border-slate-100 border border-transparent hover:border-slate-200 rounded px-2 cursor-pointer min-w-[120px]">
-                                {renderParty(item.payee)}
+                              <td className="p-3 border-r border-slate-100 min-w-[120px]">
+                                <div className="flex items-center justify-between border border-slate-200 rounded px-2 py-1.5 cursor-pointer bg-white">
+                                  {renderParty(item.payee)}
+                                  <ChevronDown size={14} className="text-slate-400" />
+                                </div>
                               </td>
-                              <td className="p-3 border-r border-slate-100">
-                                <div className="flex items-center justify-between border border-transparent hover:border-slate-200 rounded px-2 py-1.5 cursor-pointer hover:bg-slate-50 transition">
+                              <td className="p-3 border-r border-slate-100 hover:relative hover:z-50 min-w-[120px]">
+                                <div className="flex items-center justify-between border border-slate-200 rounded px-2 py-1.5 cursor-pointer hover:bg-slate-50 transition bg-white">
                                   <span className="font-semibold text-slate-900">
                                     {item.name}
                                   </span>
@@ -3355,8 +3466,8 @@ export default function App() {
                                   )}
                                 </div>
                               </td>
-                              <td className="p-3 border-r border-slate-100">
-                                <div className="flex items-center justify-between text-slate-700 hover:bg-slate-100 rounded px-2 py-1.5 cursor-pointer transition">
+                              <td className="p-3 border-r border-slate-100 min-w-[100px]">
+                                <div className="flex items-center justify-between text-slate-700 bg-white border border-slate-200 rounded px-2 py-1.5 cursor-pointer">
                                   <input
                                     type="text"
                                     value={item.unit}
@@ -3368,7 +3479,7 @@ export default function App() {
                                       )
                                     }
                                     placeholder="请选择"
-                                    className="w-full bg-transparent text-slate-700 font-semibold outline-none border-0 p-0 ring-0 focus:ring-0"
+                                    className="w-full bg-transparent text-slate-700 font-semibold outline-none border-0 p-0 ring-0 focus:ring-0 placeholder:font-normal"
                                   />
                                   <ChevronDown
                                     size={14}
@@ -3388,7 +3499,7 @@ export default function App() {
                                     )
                                   }
                                   placeholder="请输入"
-                                  className="w-16 px-1.5 py-1 text-right border border-transparent hover:border-slate-200 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 bg-transparent rounded outline-none font-mono text-slate-800"
+                                  className="w-20 px-2 py-1.5 bg-slate-50 border border-slate-200 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 rounded outline-none font-mono text-slate-800 placeholder:font-sans placeholder:font-normal"
                                 />
                               </td>
                               <td className="p-3 border-r border-slate-100">
@@ -3403,42 +3514,21 @@ export default function App() {
                                     )
                                   }
                                   placeholder="请输入"
-                                  className="w-16 px-1.5 py-1 text-right border border-transparent hover:border-slate-200 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 bg-transparent rounded outline-none font-mono text-slate-800"
+                                  className="w-20 px-2 py-1.5 bg-slate-50 border border-slate-200 focus:border-blue-400 focus:ring-1 focus:ring-blue-400 rounded outline-none font-mono text-slate-800 placeholder:font-sans placeholder:font-normal"
                                 />
                               </td>
-                              <td className="p-3 border-r border-slate-100 hover:relative hover:z-50 text-right">
+                              <td className="p-3 border-r border-slate-100 min-w-[140px] hover:relative hover:z-50 text-right">
                                 {isTargetRebateOffsetEligible ? (
                                   <div className="flex items-center justify-end gap-1.5 pb-1 select-none">
                                     <span className={`text-xs font-mono tracking-wide ${isOffsetCancelled ? "text-slate-800 font-bold" : "text-rose-600 font-extrabold"}`}>
-                                      {rowValue.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                                      {item.amount}
                                     </span>
-                                    <span className="text-[10px] font-bold text-slate-400 font-mono scale-90 pr-0.5">
+                                    <span className="text-xs font-bold text-slate-800 tracking-wide uppercase">
                                       {item.currency}
                                     </span>
-                                    {!isOffsetCancelled && (
-                                      <span
-                                        onMouseEnter={(e) => handleRebateMouseEnter(e, "payable", item)}
-                                        onMouseLeave={handleRebateMouseLeave}
-                                        className="group/offsetBadge inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-rose-50 border border-rose-100/70 text-rose-600 text-[10px] font-black shrink-0 cursor-help select-none hover:bg-rose-100 hover:border-rose-200 transition-all scale-95 relative overflow-hidden"
-                                      >
-                                        <span className="w-1 h-1 rounded-full bg-rose-500 animate-pulse group-hover/offsetBadge:hidden" />
-                                        已冲减
-                                        <span
-                                          onClick={(e) => {
-                                            e.stopPropagation();
-                                            e.preventDefault();
-                                            setShowConfirmVoidModal(true);
-                                          }}
-                                          className="text-rose-400 hover:text-rose-800 font-black text-[11px] px-0.5 hidden group-hover/offsetBadge:flex select-none cursor-pointer rounded-full transition-colors items-center justify-center leading-none"
-                                          title="作废冲减"
-                                        >
-                                          ✕
-                                        </span>
-                                      </span>
-                                    )}
                                   </div>
                                 ) : (
-                                  <div className="flex items-center border-b border-slate-200 pb-1 group focus-within:border-blue-500 transition-colors">
+                                  <div className="flex items-center bg-white border border-slate-200 rounded group focus-within:border-blue-500 transition-colors h-[34px]">
                                     <input
                                       type="text"
                                       value={rowValue.toFixed(2)}
@@ -3449,9 +3539,9 @@ export default function App() {
                                           e.target.value
                                         )
                                       }}
-                                      className="w-full font-mono font-medium outline-none pr-1.5 bg-transparent border-0 p-0 text-right focus:ring-0 text-slate-900"
+                                      className="w-full font-mono font-medium outline-none px-2 bg-transparent border-0 text-left focus:ring-0 text-slate-900 h-full"
                                     />
-                                    <div className="flex items-center text-slate-500 border-l border-slate-200 pl-1.5 cursor-pointer hover:text-slate-700 relative pr-4 shrink-0">
+                                    <div className="flex items-center h-full bg-slate-50 text-slate-500 border-l border-slate-200 px-2 cursor-pointer hover:bg-slate-100 relative shrink-0">
                                       <select
                                         value={item.currency}
                                         onChange={(e) =>
@@ -3461,27 +3551,27 @@ export default function App() {
                                             e.target.value
                                           )
                                         }
-                                        className="outline-none text-xs font-semibold text-slate-600 bg-transparent cursor-pointer appearance-none pr-1 border-0 focus:ring-0 py-0.5"
+                                        className="outline-none text-xs font-semibold text-slate-600 bg-transparent cursor-pointer appearance-none pr-3 border-0 focus:ring-0 h-full w-full absolute inset-0 opacity-0"
                                       >
                                         <option value="CNY">CNY</option>
                                         <option value="USD">USD</option>
                                         <option value="EUR">EUR</option>
                                         <option value="HKD">HKD</option>
                                       </select>
+                                      <span className="text-xs font-semibold text-slate-600 mr-1 select-none pointer-events-none">{item.currency}</span>
                                       <ChevronDown
-                                        size={11}
-                                        className="text-slate-400 absolute right-0 pointer-events-none"
+                                        size={12}
+                                        className="text-slate-400 pointer-events-none"
                                       />
                                     </div>
                                   </div>
                                 )}
                               </td>
-                              <td className="p-3 border-r border-slate-100">
-                                <div className="flex items-center space-x-1 border border-transparent hover:border-slate-200 focus-within:border-blue-400 rounded px-1 py-1">
-                                  <X
-                                    size={10}
-                                    className="text-green-500 font-bold shrink-0"
-                                  />
+                              <td className="p-3 border-r border-slate-100 min-w-[90px]">
+                                <div className="flex items-center bg-white border border-slate-200 focus-within:border-blue-400 rounded h-[34px]">
+                                  <div className="px-2 text-rose-500 font-bold border-r border-slate-100 flex items-center justify-center shrink-0">
+                                    <span className="text-sm">÷</span>
+                                  </div>
                                   <input
                                     type="text"
                                     value={item.rate}
@@ -3492,31 +3582,75 @@ export default function App() {
                                         e.target.value
                                       )
                                     }
-                                    className="w-10 bg-transparent text-slate-900 font-mono outline-none text-left p-0 border-none focus:ring-0 font-medium"
+                                    className="w-full bg-transparent px-2 text-slate-900 font-mono outline-none text-left border-none focus:ring-0 font-medium h-full"
                                   />
                                 </div>
                               </td>
-                              <td className="p-3 border-r border-slate-100 bg-yellow-50/20">
-                                <div className="flex items-center justify-between px-2 py-1 border border-transparent hover:border-slate-200 focus-within:border-blue-400 rounded transition-colors w-full">
-                                  <span className="font-mono font-bold text-slate-900">
-                                    {rowConvertedValue.toLocaleString("en-US", {
-                                      minimumFractionDigits: 2,
-                                      maximumFractionDigits: 2,
-                                    })}
-                                  </span>
-                                  <span className="text-blue-700 text-[10px] font-black uppercase">
-                                    {item.convertedCurrency || orderCurrency}
-                                  </span>
+                              <td className="p-3 border-r border-slate-100 min-w-[160px] bg-yellow-50/20">
+                                <div className="flex items-center bg-white border border-slate-200 focus-within:border-blue-400 rounded transition-colors w-full h-[34px]">
+                                  <input
+                                    type="text"
+                                    value={rowConvertedValue.toFixed(2)}
+                                    readOnly
+                                    className="w-full font-mono px-2 font-medium text-slate-900 outline-none bg-transparent border-none text-left focus:ring-0 h-full"
+                                  />
+                                  <div className="flex items-center h-full bg-slate-50 text-slate-500 border-l border-slate-200 px-2 cursor-pointer hover:bg-slate-100 relative shrink-0 font-bold">
+                                    <select
+                                      value={item.convertedCurrency || "CNY"}
+                                      onChange={(e) =>
+                                        updatePayableFee(
+                                          item.id,
+                                          "convertedCurrency",
+                                          e.target.value
+                                        )
+                                      }
+                                      className="outline-none text-[10px] font-black text-slate-900 bg-transparent cursor-pointer appearance-none border-0 focus:ring-0 py-0.5 uppercase h-full w-full absolute inset-0 opacity-0"
+                                    >
+                                      <option value="CNY">CNY</option>
+                                      <option value="USD">USD</option>
+                                      <option value="EUR">EUR</option>
+                                      <option value="HKD">HKD</option>
+                                    </select>
+                                    <span className="uppercase text-xs font-semibold text-slate-900 select-none pointer-events-none pr-1">{item.convertedCurrency || "CNY"}</span>
+                                    <ChevronDown
+                                      size={12}
+                                      className="text-slate-400 pointer-events-none"
+                                    />
+                                  </div>
                                 </div>
                               </td>
-                              <td className="p-3 text-slate-400 flex items-center justify-between border border-transparent hover:border-slate-200 rounded px-2 py-1 cursor-pointer">
-                                <span>{item.date}</span> <Calendar size={14} />
+                              <td className="p-3 border-r border-slate-100 min-w-[130px]">
+                                <div className="flex items-center justify-between text-slate-700 bg-slate-50 border border-slate-200 rounded px-2 py-1.5 focus-within:border-blue-400">
+                                  {item.badge === "代付其他" ? (
+                                    <>
+                                      <input type="text" placeholder="请输入" className="w-full bg-transparent text-slate-600 outline-none border-none p-0 text-xs focus:ring-0 placeholder:font-normal" />
+                                      <span className="text-blue-500 hover:text-blue-600 cursor-pointer font-bold ml-1 shrink-0">选择</span>
+                                    </>
+                                  ) : (
+                                    <span className="text-slate-400 font-normal">--</span>
+                                  )}
+                                </div>
                               </td>
-                              <td className="p-3 font-medium flex items-center space-x-1">
-                                <Paperclip size={14} className="text-slate-400" />{" "}
-                                <span className="text-blue-600 hover:underline cursor-pointer">
-                                  {item.files}
-                                </span>
+                              <td className="p-3 border-r border-slate-100 min-w-[130px]">
+                                <div className="flex items-center justify-between bg-white border border-slate-200 text-slate-700 rounded px-2 py-1.5 cursor-pointer">
+                                  <input
+                                    type="text"
+                                    value={item.date}
+                                    readOnly
+                                    className="w-full bg-transparent text-slate-600 outline-none border-none p-0 text-xs focus:ring-0 cursor-pointer text-left"
+                                  />
+                                  <Calendar size={14} className="text-slate-400 ml-1 shrink-0" />
+                                </div>
+                              </td>
+                              <td className="p-3 border-r border-slate-100 min-w-[120px]">
+                                <input
+                                  type="text"
+                                  placeholder="请输入"
+                                  className="w-full px-2 py-1.5 border border-slate-200 bg-white focus:border-blue-400 rounded outline-none text-slate-700 placeholder:font-normal placeholder-slate-300 text-left"
+                                />
+                              </td>
+                              <td className={`p-3 text-center sticky right-0 border-l border-slate-100 shadow-[-2px_0_4px_rgba(0,0,0,0.03)] z-10 ${isHighlighted ? "bg-[#FFFCEB]" : "bg-white group-hover:bg-[#FAFCFF]"} transition-colors duration-200`}>
+                                <span className="text-blue-500 hover:text-blue-600 text-xs cursor-pointer select-none">上传</span>
                               </td>
                             </tr>
                           );
@@ -3560,6 +3694,7 @@ export default function App() {
                               </span>
                             </div>
                           </td>
+                          <td className="p-4 border-t border-[#ffeb99] sticky right-0 bg-[#fff9e6] shadow-[-2px_0_4px_rgba(0,0,0,0.03)] z-10 border-l border-[#ffe47a]"></td>
                         </tr>
                       </tfoot>
                     </table>
@@ -3647,7 +3782,7 @@ export default function App() {
                             title="来源商品明细，商品返利=订货金额-供货金额"
                           />
                           {/* Beautiful floating hover popup */}
-                          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2.5 hidden group-hover:block w-60 bg-slate-800 text-white text-xs rounded-lg py-2 px-3 shadow-xl z-50 pointer-events-none transition-all duration-150 leading-relaxed text-center font-normal">
+                          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2.5 hidden group-hover:block w-60 bg-slate-800 text-white text-xs rounded-lg py-2 px-3 shadow-xl z-[99999] pointer-events-none transition-all duration-150 leading-relaxed text-center font-normal">
                             <div className="relative">
                               来源商品明细，商品返利=订货金额-供货金额
                               <span className="absolute bottom-full left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-800 rotate-45 transform mb-[5px]"></span>
