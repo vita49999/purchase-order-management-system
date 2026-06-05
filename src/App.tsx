@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
+import ReceivableFeesView from "./ReceivableFeesView";
 import {
   Home,
   Building2,
@@ -925,20 +926,6 @@ const PurchaseOrderDetail = () => {
                     {hoveredRebateInfo.item?.offsetVal ? "2,620.00" : "2,620.00"} CNY
                   </span>
                 </div>
-                <div className="pl-5 space-y-1">
-                    <div className="flex justify-between items-center text-[10px] text-slate-400">
-                       <span>商品返利</span>
-                       <span className="font-mono">100.00 CNY</span>
-                    </div>
-                    <div className="flex justify-between items-center text-[10px] text-slate-400">
-                       <span>返点</span>
-                       <span className="font-mono">98.00 CNY</span>
-                    </div>
-                    <div className="flex justify-between items-center text-[10px] text-slate-400">
-                       <span>商品折扣</span>
-                       <span className="font-mono text-slate-400">2422.00 CNY</span>
-                    </div>
-                </div>
                 
                 <div className="flex justify-between items-center text-[11px] text-slate-600 font-medium select-none text-slate-700 mt-2">
                   <span className="flex items-center gap-1.5">
@@ -1008,6 +995,23 @@ const PurchaseOrderDetail = () => {
 
 export default function App() {
   const [activeTab, setActiveTab] = useState("代采订单");
+  const [activeNav, setActiveNav] = useState("贸易");
+  
+  const handleNavClick = (nav: string) => {
+    setActiveNav(nav);
+    if (nav === "贸易") {
+      setActiveTab("代采订单");
+    } else if (nav === "结算") {
+      setActiveTab("应收费用");
+    }
+  };
+
+  const handleTabClick = (tab: string) => {
+    setActiveTab(tab);
+    if (tab === "代采订单") setActiveNav("贸易");
+    if (tab === "应收费用") setActiveNav("结算");
+  };
+
   const [viewMode, setViewMode] = useState<"create" | "detail">("create");
   const [isSidebarCollapsed, setIsSidebarCollapsed] = useState(false);
   const [rebates, setRebates] = useState([
@@ -1015,6 +1019,7 @@ export default function App() {
     { id: 2, type: "现金折扣", amountType: "按金额", amount: "2422" },
   ]);
   const [showRebateModal, setShowRebateModal] = useState(false);
+  const [manualRebateOverride, setManualRebateOverride] = useState<string>("");
   const [orderCurrency, setOrderCurrency] = useState("CNY");
   const [isOffsetCancelled, setIsOffsetCancelled] = useState(false);
   const [showConfirmVoidModal, setShowConfirmVoidModal] = useState(false);
@@ -1407,7 +1412,7 @@ export default function App() {
       item.name === "尾款" &&
       item.badge === "代付货款"
     ) {
-      const rebate = calculateTotalRebate();
+      const rebate = getFinalRebateAmount();
       const otherOffset = receivableFees
         .filter((rf) => rf.payer === "奥特莱斯贸易有限公司" && rf.badge !== "返利")
         .reduce((sum, rf) => sum + (parseFloat(rf.amount) || 0), 0);
@@ -1485,6 +1490,16 @@ export default function App() {
     return total;
   };
 
+  const getFinalRebateAmount = () => {
+    if (manualRebateOverride && manualRebateOverride.trim() !== "") {
+      const val = parseFloat(manualRebateOverride);
+      if (!isNaN(val) && val >= 0) {
+        return val;
+      }
+    }
+    return calculateTotalRebate();
+  };
+
   const getActiveRebatesCount = () => {
     let count = 0;
     if (getProductRebate() !== 0) {
@@ -1499,9 +1514,9 @@ export default function App() {
     return count;
   };
 
-  // Synchronize "采购返利" amount with calculateTotalRebate()
+  // Synchronize "采购返利" amount with getFinalRebateAmount()
   useEffect(() => {
-    const totalRebate = calculateTotalRebate();
+    const totalRebate = getFinalRebateAmount();
     setReceivableFees((prev) => {
       const exists = prev.some((item) => item.name === "采购返利");
       if (exists) {
@@ -1540,7 +1555,7 @@ export default function App() {
         ];
       }
     });
-  }, [orderItems, rebates]);
+  }, [orderItems, rebates, manualRebateOverride]);
 
   const updateOrderItem = (
     id: number,
@@ -1576,23 +1591,29 @@ export default function App() {
         <div className="flex flex-col items-center space-y-1 hover:text-white cursor-pointer mb-2">
           <Home size={18} />
         </div>
-        <div className="flex flex-col items-center space-y-1 text-blue-400 cursor-pointer">
+        <div 
+          onClick={() => handleNavClick("贸易")}
+          className={`flex flex-col items-center space-y-1 cursor-pointer ${activeNav === "贸易" ? "text-blue-400" : "hover:text-white text-slate-400"}`}
+        >
           <Briefcase size={18} />
           <span className="text-[10px] transform scale-90">贸易</span>
         </div>
-        <div className="flex flex-col items-center space-y-1 hover:text-white cursor-pointer">
+        <div className="flex flex-col items-center space-y-1 hover:text-white cursor-pointer text-slate-400">
           <Truck size={18} />
           <span className="text-[10px] transform scale-90">运输</span>
         </div>
-        <div className="flex flex-col items-center space-y-1 hover:text-white cursor-pointer">
+        <div className="flex flex-col items-center space-y-1 hover:text-white cursor-pointer text-slate-400">
           <Box size={18} />
           <span className="text-[10px] transform scale-90">仓库</span>
         </div>
-        <div className="flex flex-col items-center space-y-1 hover:text-white cursor-pointer">
+        <div className="flex flex-col items-center space-y-1 hover:text-white cursor-pointer text-slate-400">
           <Building2 size={18} />
           <span className="text-[10px] transform scale-90">关务</span>
         </div>
-        <div className="flex flex-col items-center space-y-1 hover:text-white cursor-pointer">
+        <div 
+          onClick={() => handleNavClick("结算")}
+          className={`flex flex-col items-center space-y-1 cursor-pointer ${activeNav === "结算" ? "text-blue-400" : "hover:text-white text-slate-400"}`}
+        >
           <Wallet size={18} />
           <span className="text-[10px] transform scale-90">结算</span>
         </div>
@@ -1615,29 +1636,34 @@ export default function App() {
         {/* Top App Header */}
         <div className="h-16 bg-white border-b border-slate-200 flex items-center justify-between px-6 shrink-0">
           <div className="flex items-center space-x-2">
-            <div className="flex items-center space-x-1 border-r border-slate-200 pr-3 py-1">
-              <span className="text-slate-500 hover:text-blue-600 cursor-pointer px-3 font-medium uppercase tracking-wider text-xs">
+            <div 
+              onClick={() => handleTabClick("首页")}
+              className={`flex items-center space-x-1 ${activeTab === '首页' ? 'bg-blue-50 text-blue-600 rounded-md' : 'border-r border-slate-200 text-slate-500 hover:text-blue-600'} pr-2 py-1 ml-2 cursor-pointer`}
+            >
+              <span className={`px-3 uppercase tracking-wider text-xs ${activeTab === '首页' ? 'font-semibold' : 'font-medium'}`}>
                 首页
               </span>
-              <X size={14} className="text-transparent" />
+              <X size={14} className={activeTab === '首页' ? 'text-blue-400 hover:text-blue-600' : 'text-transparent'} />
             </div>
-            <div className="flex items-center space-x-1 border-r border-slate-200 pr-3 py-1">
-              <span className="text-slate-500 hover:text-blue-600 cursor-pointer px-3 font-medium uppercase tracking-wider text-xs">
+            
+            <div 
+              onClick={() => handleTabClick("应收费用")}
+              className={`flex items-center space-x-1 ${activeTab === '应收费用' ? 'bg-blue-50 text-blue-600 rounded-md' : 'border-r border-slate-200 text-slate-500 hover:text-blue-600'} pr-2 py-1 ml-2 cursor-pointer`}
+            >
+              <span className={`px-3 uppercase tracking-wider text-xs ${activeTab === '应收费用' ? 'font-semibold' : 'font-medium'}`}>
                 应收费用
               </span>
-              <X
-                size={14}
-                className="text-slate-400 hover:text-slate-600 cursor-pointer"
-              />
+              <X size={14} className={activeTab === '应收费用' ? 'text-blue-400 hover:text-blue-600' : 'text-slate-400 hover:text-slate-600'} />
             </div>
-            <div className="flex items-center space-x-1 bg-blue-50 text-blue-600 rounded-md pr-2 py-1 ml-2">
-              <span className="font-semibold px-3 uppercase tracking-wider text-xs">
+            
+            <div 
+              onClick={() => handleTabClick("代采订单")}
+              className={`flex items-center space-x-1 ${activeTab === '代采订单' ? 'bg-blue-50 text-blue-600 rounded-md' : 'border-r border-slate-200 text-slate-500 hover:text-blue-600'} pr-2 py-1 ml-2 cursor-pointer`}
+            >
+              <span className={`px-3 uppercase tracking-wider text-xs ${activeTab === '代采订单' ? 'font-semibold' : 'font-medium'}`}>
                 代采订单
               </span>
-              <X
-                size={14}
-                className="text-blue-400 hover:text-blue-600 cursor-pointer"
-              />
+              <X size={14} className={activeTab === '代采订单' ? 'text-blue-400 hover:text-blue-600' : 'text-slate-400 hover:text-slate-600'} />
             </div>
           </div>
 
@@ -1666,6 +1692,9 @@ export default function App() {
           </div>
         </div>
 
+        {/* Main Workspace Area */}
+        {activeTab === '代采订单' && (
+          <div className="flex-1 flex flex-col min-w-0 overflow-hidden">
         {/* Workspace Workspace Navigation */}
         <div className="bg-white border-b border-slate-200 px-6 flex space-x-8 h-12 shrink-0">
           {[
@@ -2293,13 +2322,13 @@ export default function App() {
                         <span className="text-blue-500 font-normal">/</span>
                         <span className="text-xl text-green-400">
                           ¥
-                          {Math.floor(calculateTotalRebate()).toLocaleString(
+                          {Math.floor(getFinalRebateAmount()).toLocaleString(
                             "en-US",
                           )}
                         </span>
                         <span className="text-xs text-green-700">
                           .
-                          {(calculateTotalRebate() % 1)
+                          {(getFinalRebateAmount() % 1)
                             .toFixed(2)
                             .split(".")[1] || "00"}
                         </span>
@@ -2722,7 +2751,7 @@ export default function App() {
                                 :
                               </span>
                               <span className="font-mono font-bold text-slate-800 mr-4">
-                                {calculateTotalRebate().toLocaleString(
+                                {getFinalRebateAmount().toLocaleString(
                                   "en-US",
                                   {
                                     minimumFractionDigits: 2,
@@ -3413,7 +3442,7 @@ export default function App() {
                             item.payee === "奥特莱斯贸易有限公司" &&
                             item.name === "尾款" &&
                             item.badge === "代付货款" &&
-                            (calculateTotalRebate() > 0 || receivableFees.some(rf => rf.payer === "奥特莱斯贸易有限公司" && rf.badge !== "返利" && (parseFloat(rf.amount) || 0) > 0));
+                            (getFinalRebateAmount() > 0 || receivableFees.some(rf => rf.payer === "奥特莱斯贸易有限公司" && rf.badge !== "返利" && (parseFloat(rf.amount) || 0) > 0));
 
                           const p = parseFloat(item.price);
                           const q = parseFloat(item.qty);
@@ -3523,9 +3552,30 @@ export default function App() {
                                     <span className={`text-xs font-mono tracking-wide ${isOffsetCancelled ? "text-slate-800 font-bold" : "text-rose-600 font-extrabold"}`}>
                                       {item.amount}
                                     </span>
-                                    <span className="text-xs font-bold text-slate-800 tracking-wide uppercase">
+                                    <span className="text-xs font-bold text-slate-800 tracking-wide uppercase mr-1">
                                       {item.currency}
                                     </span>
+                                    {!isOffsetCancelled && (
+                                      <div
+                                        onMouseEnter={(e) => handleRebateMouseEnter(e, "payable", item)}
+                                        onMouseLeave={handleRebateMouseLeave}
+                                        className="group/offsetBadge inline-flex items-center gap-1 px-1.5 py-0.5 rounded bg-rose-50 border border-rose-100/70 text-rose-600 text-[10px] font-black shrink-0 cursor-help select-none hover:bg-rose-100 hover:border-rose-200 transition-all scale-95 relative overflow-hidden"
+                                      >
+                                        <span className="w-1 h-1 rounded-full bg-rose-500 animate-pulse group-hover/offsetBadge:hidden" />
+                                        已冲减
+                                        <span
+                                          onClick={(e) => {
+                                            e.stopPropagation();
+                                            e.preventDefault();
+                                            setShowConfirmVoidModal(true);
+                                          }}
+                                          className="hidden group-hover/offsetBadge:inline-flex items-center justify-center w-3 h-3 -mr-0.5 bg-rose-200/50 hover:bg-rose-200 text-rose-600 rounded-full transition-colors font-sans leading-none text-[8px]"
+                                          title="作废冲减"
+                                        >
+                                          ×
+                                        </span>
+                                      </div>
+                                    )}
                                   </div>
                                 ) : (
                                   <div className="flex items-center bg-white border border-slate-200 rounded group focus-within:border-blue-500 transition-colors h-[34px]">
@@ -3757,116 +3807,153 @@ export default function App() {
             {/* Edit Rebates Modal */}
             {showRebateModal && (
               <div className="fixed inset-0 bg-slate-900/50 z-50 flex items-center justify-center pointer-events-auto">
-                <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col mx-4">
+                <div className="bg-white rounded-xl shadow-2xl w-full max-w-lg overflow-hidden flex flex-col mx-4 select-none">
                   <div className="flex items-center justify-between px-6 py-4 border-b border-slate-100">
-                    <h3 className="font-bold text-slate-800 text-base">
+                    <h3 className="font-bold text-slate-800 text-[15px]">
                       编辑采购返利
                     </h3>
                     <button
                       onClick={() => setShowRebateModal(false)}
-                      className="text-slate-400 hover:text-slate-600 transition-colors"
+                      className="text-slate-400 hover:text-slate-600 transition-colors cursor-pointer"
                     >
-                      <X size={20} />
+                      <X size={18} />
                     </button>
                   </div>
+                  
                   <div className="p-6 bg-white space-y-4 max-h-[70vh] overflow-y-auto w-full">
+                    
+                    {/* Row 1: 商品返利 */}
                     <div className="flex items-center justify-between gap-4">
-                      <div className="border border-slate-200 bg-slate-50 rounded flex items-center shadow-sm w-64 px-3 py-2 shrink-0 relative group">
-                        <span className="text-slate-500 font-medium whitespace-nowrap">
-                          商品返利
-                        </span>
-                        <div className="relative flex items-center">
+                      <div className="flex items-center gap-1 w-24 shrink-0">
+                        <span className="text-slate-500 font-medium text-sm whitespace-nowrap">商品返利</span>
+                        <div className="relative flex items-center group">
                           <HelpCircle
                             size={14}
-                            className="ml-1.5 text-slate-400 shrink-0 cursor-help"
-                            title="来源商品明细，商品返利=订货金额-供货金额"
+                            className="text-slate-300 shrink-0 cursor-help"
                           />
                           {/* Beautiful floating hover popup */}
-                          <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2.5 hidden group-hover:block w-60 bg-slate-800 text-white text-xs rounded-lg py-2 px-3 shadow-xl z-[99999] pointer-events-none transition-all duration-150 leading-relaxed text-center font-normal">
+                          <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 hidden group-hover:block w-64 bg-slate-800 text-white text-[11px] rounded-lg py-2 px-3 shadow-xl z-[99999] pointer-events-none transition-all duration-150 leading-relaxed font-normal">
                             <div className="relative">
                               来源商品明细，商品返利=订货金额-供货金额
-                              <span className="absolute bottom-full left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-800 rotate-45 transform mb-[5px]"></span>
+                              <span className="absolute top-full left-1/2 -translate-x-1/2 w-2 h-2 bg-slate-800 rotate-45 transform -mt-1"></span>
                             </div>
                           </div>
                         </div>
                       </div>
-                      <div className="flex border border-slate-200 rounded-md overflow-hidden bg-slate-50 shadow-sm flex-1">
-                        <input
-                          type="text"
-                          value={getProductRebate().toLocaleString("en-US", {
-                            minimumFractionDigits: 0,
-                            maximumFractionDigits: 2,
-                          })}
-                          disabled
-                          className="w-full px-3 py-2 text-slate-500 font-mono text-right outline-none bg-transparent"
-                        />
-                        <span className="px-3 py-2 bg-slate-50 border-l border-slate-200 text-slate-400 font-bold text-xs flex items-center shrink-0">
+                      
+                      <div className="flex border border-slate-200 rounded-md overflow-hidden bg-[#FAFAFA] flex-1 h-10 items-center justify-between px-3">
+                        <span className="text-slate-400 italic font-mono font-bold text-sm tracking-wide ml-auto mr-1.5">
+                          {getProductRebate().toFixed(2)}
+                        </span>
+                        <span className="text-slate-400 font-bold text-xs uppercase">CNY</span>
+                      </div>
+                    </div>
+
+                    {/* Dynamic rows: 返点 and 现金折扣 */}
+                    {rebates.map((item) => (
+                      <div
+                        key={item.id}
+                        className="flex items-center justify-between gap-4"
+                      >
+                        <span className="text-slate-500 font-medium text-sm whitespace-nowrap w-24 shrink-0">
+                          {item.type}
+                        </span>
+                        
+                        <div className="flex items-center gap-2 flex-1">
+                          {/* Dropdown list for selecting calculation type */}
+                          <div className="border border-slate-200 bg-white rounded-md flex items-center justify-between shadow-sm w-32 h-10 overflow-hidden px-3 relative shrink-0">
+                            <select
+                              className="w-full h-full outline-none text-slate-700 font-medium cursor-pointer appearance-none bg-transparent pr-4 text-sm"
+                              value={item.amountType}
+                              onChange={(e) =>
+                                updateRebateAmountType(item.id, e.target.value)
+                              }
+                            >
+                              <option value="按比例">按比例</option>
+                              <option value="按金额">按金额</option>
+                            </select>
+                            <ChevronDown
+                              size={14}
+                              className="text-slate-400 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2"
+                            />
+                          </div>
+
+                          {/* Code input box */}
+                          <div className="flex border border-slate-200 rounded-md overflow-hidden bg-white shadow-sm flex-1 focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-400 transition-all h-10 items-center">
+                            <input
+                              type="text"
+                              value={item.amount}
+                              onChange={(e) =>
+                                updateRebateAmount(item.id, e.target.value)
+                              }
+                              className="w-full h-full px-3 text-slate-900 font-mono text-right outline-none text-sm"
+                            />
+                            <span className="px-3 bg-slate-50 border-l border-slate-200 text-slate-500 font-bold text-xs flex items-center h-full shrink-0 uppercase select-none">
+                              {item.amountType === "按金额" ? "CNY" : "%"}
+                            </span>
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+
+                    {/* System Calculation preview card */}
+                    <div className="bg-[#F8FAFF] border border-blue-50/50 rounded-lg p-4 flex flex-col items-center justify-center space-y-1">
+                      <span className="text-[11px] text-slate-400 font-bold select-none tracking-wider">系统计算预览</span>
+                      <div className="flex items-baseline justify-center">
+                        <span className="font-mono text-2xl font-extrabold text-slate-800">
+                          {calculateTotalRebate().toFixed(2)}
+                        </span>
+                        <span className="text-xs text-blue-500 font-bold tracking-wider uppercase ml-1">
                           CNY
                         </span>
                       </div>
                     </div>
 
-                    {rebates.map((item, index) => (
-                      <div
-                        key={item.id}
-                        className="flex items-center justify-between gap-4"
-                      >
-                        <div className="border border-slate-200 bg-slate-50 rounded flex items-center shadow-sm w-32 px-3 py-2 text-slate-500 font-medium shrink-0">
-                          {item.type}
-                        </div>
-                        <div className="border border-slate-200 bg-white rounded flex items-center justify-between shadow-sm w-28 hover:border-slate-300 overflow-hidden px-3 py-2 shrink-0 relative">
-                          <select
-                            className="w-full outline-none text-slate-700 font-medium cursor-pointer appearance-none bg-transparent pr-4"
-                            value={item.amountType}
-                            onChange={(e) =>
-                              updateRebateAmountType(item.id, e.target.value)
-                            }
-                          >
-                            <option value="按比例">按比例</option>
-                            <option value="按金额">按金额</option>
-                          </select>
-                          <ChevronDown
-                            size={14}
-                            className="text-slate-400 pointer-events-none absolute right-2.5 top-1/2 -translate-y-1/2"
-                          />
-                        </div>
-                        <div className="flex border border-slate-200 rounded-md overflow-hidden bg-white shadow-sm flex-1 focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-400 transition-all">
-                          <input
-                            type="text"
-                            value={item.amount}
-                            onChange={(e) =>
-                              updateRebateAmount(item.id, e.target.value)
-                            }
-                            className="w-full px-3 py-2 text-slate-900 font-mono text-right outline-none focus:bg-slate-50"
-                          />
-                          <span className="px-3 py-2 bg-slate-50 border-l border-slate-200 text-slate-500 font-bold text-xs flex items-center shrink-0">
-                            {item.amountType === "按金额" ? "CNY" : "%"}
-                          </span>
-                        </div>
-                      </div>
-                    ))}
+                    {/* Dashed divider */}
+                    <div className="border-t border-dashed border-slate-200 my-4" />
 
-                    <div className="mt-6 bg-slate-50 rounded-lg p-5 flex justify-end items-center text-slate-800 font-medium border border-slate-100">
-                      累计返利:{" "}
-                      <span className="font-mono text-[17px] font-bold ml-3">
-                        {calculateTotalRebate().toLocaleString("en-US", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}{" "}
-                        CNY
-                      </span>
+                    {/* Manual Override Form */}
+                    <div className="space-y-2">
+                      <h4 className="text-xs font-bold text-slate-700">手动修正最终金额</h4>
+                      
+                      <div className="flex border border-slate-200 rounded-md bg-white overflow-hidden shadow-sm hover:border-slate-300 focus-within:border-blue-400 focus-within:ring-1 focus-within:ring-blue-400 transition-all h-11 items-center">
+                        {/* Left ¥ block */}
+                        <div className="px-4 bg-slate-50 border-r border-slate-155 h-full flex items-center justify-center shrink-0">
+                          <span className="text-slate-400 font-mono font-medium text-base select-none">¥</span>
+                        </div>
+                        {/* Numerical input */}
+                        <input
+                          type="text"
+                          placeholder="输入手动调整后的最终金额"
+                          value={manualRebateOverride}
+                          onChange={(e) => {
+                            setManualRebateOverride(e.target.value);
+                          }}
+                          className="w-full h-full px-4 text-slate-800 font-mono text-left outline-none text-xs placeholder-slate-300 font-medium"
+                        />
+                        {/* Right CNY prefix */}
+                        <span className="px-4 text-slate-300 font-bold text-[10px] uppercase select-none shrink-0">
+                          CNY
+                        </span>
+                      </div>
+
+                      <p className="text-[11px] text-slate-400 leading-relaxed">
+                        * 手动输入的值将直接作为最终采购返利结果，且不能为负数。
+                      </p>
                     </div>
+
                   </div>
+                  
                   <div className="px-6 py-4 border-t border-slate-100 flex justify-end space-x-3 bg-white">
                     <button
                       onClick={() => setShowRebateModal(false)}
-                      className="px-6 py-2 border border-slate-200 text-slate-600 font-bold rounded-md hover:bg-slate-50 transition-colors"
+                      className="px-5 py-2 border border-slate-200 text-slate-600 font-bold rounded-md hover:bg-slate-50 transition-colors text-xs cursor-pointer"
                     >
                       取消
                     </button>
                     <button
                       onClick={() => setShowRebateModal(false)}
-                      className="px-6 py-2 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition-colors"
+                      className="px-5 py-2 bg-blue-600 text-white font-bold rounded-md hover:bg-blue-700 transition-colors text-xs cursor-pointer shadow-sm hover:shadow"
                     >
                       确认并保存
                     </button>
@@ -3921,7 +4008,7 @@ export default function App() {
                             let originalVal = 0;
                             if (item) {
                               if (item.badge === "返利") {
-                                originalVal = calculateTotalRebate();
+                                originalVal = getFinalRebateAmount();
                               } else {
                                 originalVal = parseFloat(item.amount) || 0;
                               }
@@ -3942,7 +4029,7 @@ export default function App() {
                           <span className="text-[9px] text-slate-400 select-none">▼</span>
                           已冲减
                           <span 
-                            title="当前费用，用于冲减其它费用的金额；其它费用的来源可展开明细查看"
+                            title="当前费用，用于冲减其它费用的金额"
                             className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full border border-slate-300 bg-slate-50 text-slate-500 text-[10px] font-bold cursor-help hover:bg-slate-100 transition-colors select-none"
                           >
                             ?
@@ -3952,7 +4039,7 @@ export default function App() {
                         <span className={`font-bold font-mono text-xs ${isOffsetCancelled ? "text-slate-400 line-through" : "text-rose-600"}`}>
                           -{(() => {
                             const originalFeePayable = getPayableTailOriginalAmount();
-                            const totalRebate = calculateTotalRebate();
+                            const totalRebate = getFinalRebateAmount();
                             const item = hoveredRebateInfo.item;
                             let offsetVal = 0;
                             if (item) {
@@ -3971,7 +4058,7 @@ export default function App() {
                       <div className="pl-3.5 border-l border-slate-100 ml-1.5 space-y-2">
                         {(() => {
                           const originalFeePayable = getPayableTailOriginalAmount();
-                          const totalRebate = calculateTotalRebate();
+                          const totalRebate = getFinalRebateAmount();
                           const item = hoveredRebateInfo.item;
                           let offsetVal = 0;
                           if (item) {
@@ -4011,7 +4098,7 @@ export default function App() {
                         {(() => {
                           const payableTailItem = payableFees.find(pf => pf.payee === "奥特莱斯贸易有限公司" && pf.name === "尾款" && pf.badge === "代付货款");
                           const originalFeePayable = payableTailItem ? (parseFloat(payableTailItem.price) * parseFloat(payableTailItem.qty) || parseFloat(payableTailItem.amount) || 0) : 0;
-                          const totalRebate = calculateTotalRebate();
+                          const totalRebate = getFinalRebateAmount();
                           const item = hoveredRebateInfo.item;
                           let remaining = 0;
                           if (item) {
@@ -4029,71 +4116,105 @@ export default function App() {
                   </div>
                 ) : hoveredRebateInfo.type === "receivable" ? (
                   /* RECEIVABLE (返利明细) POPUP CONTENT */
-                  <div className="space-y-2.5 text-xs">
-                    {/* 商品返利 */}
-                    {getProductRebate() > 0 && (
-                      <div className="flex items-center justify-between gap-2.5">
-                        <span className="text-slate-500 w-16 text-center select-none py-1.5 px-2 bg-slate-50 border border-slate-200 rounded text-[11px] font-medium shrink-0">商品返利</span>
-                        <div className="flex border border-slate-200 rounded bg-slate-50 flex-1 overflow-hidden h-7 items-center">
-                          <span className="w-full px-2 text-right text-slate-500 font-mono text-[11px]">{getProductRebate().toFixed(2)}</span>
-                          <span className="px-2 py-1 bg-slate-50 border-l border-slate-200 text-slate-400 font-bold text-[9px] h-full flex items-center shrink-0">CNY</span>
+                  <div className="space-y-3.5 text-xs">
+                    {/* Items Details (Weakened) */}
+                    <div className="space-y-2 border border-slate-100 bg-slate-50/30 rounded-lg p-2.5">
+                      <div className="text-[10px] text-slate-400 font-bold tracking-wider uppercase mb-1 flex items-center gap-1.5 select-none">
+                        <span>明细结算项</span>
+                        <div className="h-[1px] bg-slate-100 flex-1"></div>
+                      </div>
+
+                      {/* 商品返利 */}
+                      <div className="flex items-center justify-between text-[11px] select-none">
+                        <span className="text-slate-400">商品返利</span>
+                        <div className="flex items-center gap-1.5">
+                          <span className="text-[9px] text-slate-400 bg-slate-100/60 px-1 py-0.5 rounded font-mono">
+                            按明细
+                          </span>
+                          <span className="font-mono text-slate-500 font-medium text-right min-w-[65px]">
+                            {getProductRebate().toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                          </span>
+                          <span className="text-slate-400 font-bold text-[9px] w-6 text-right">CNY</span>
+                        </div>
+                      </div>
+
+                      {/* Dynamic rebates */}
+                      {rebates.map((subItem) => {
+                        const isRatio = subItem.amountType === "按比例";
+                        const computedBase = orderItems.reduce((sum, item) => {
+                          const q = parseFloat(item.quantity) || 0;
+                          const sp = parseFloat(item.supplyPrice) || 0;
+                          return sum + q * sp;
+                        }, 0) || 4733.3333;
+                        const cnyVal = isRatio 
+                          ? ((parseFloat(subItem.amount) || 0) / 100) * computedBase 
+                          : (parseFloat(subItem.amount) || 0);
+
+                        return (
+                          <div key={subItem.id} className="flex items-center justify-between text-[11px] select-none">
+                            <span className="text-slate-400 truncate max-w-[80px]">{subItem.type}</span>
+                            <div className="flex items-center gap-1.5">
+                              <span className="text-[9px] text-slate-400 bg-slate-100/60 px-1 py-0.5 rounded font-mono">
+                                {isRatio ? `比例 ${subItem.amount}%` : subItem.amountType}
+                              </span>
+                              <span className="font-mono text-slate-500 font-medium text-right min-w-[65px]">
+                                {cnyVal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                              </span>
+                              <span className="text-slate-400 font-bold text-[9px] w-6 text-right">CNY</span>
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+
+                    {/* Manual override / adjustment block */}
+                    {manualRebateOverride && manualRebateOverride.trim() !== "" && (
+                      <div className="space-y-1.5 text-[11px] px-1 select-none">
+                        <div className="flex justify-between items-center text-slate-400 font-medium pb-1 border-b border-dashed border-slate-100">
+                          <span>计算中间量</span>
+                        </div>
+                        <div className="flex justify-between items-center text-[10px]">
+                          <span className="text-slate-400">系统计算 (小计)</span>
+                          <span className="font-mono text-slate-400 font-medium">
+                            {calculateTotalRebate().toLocaleString("en-US", { minimumFractionDigits: 2 })} CNY
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-slate-500 font-medium">手工修正值</span>
+                          <span className="font-mono text-slate-600 font-semibold bg-slate-100/80 px-1.5 py-0.5 rounded text-[10px]">
+                            {(parseFloat(manualRebateOverride) || 0).toLocaleString("en-US", { minimumFractionDigits: 2 })} CNY
+                          </span>
                         </div>
                       </div>
                     )}
 
-                    {/* Dynamic rebates */}
-                    {rebates.map((subItem) => {
-                      const isRatio = subItem.amountType === "按比例";
-                      const computedBase = orderItems.reduce((sum, item) => {
-                        const q = parseFloat(item.quantity) || 0;
-                        const sp = parseFloat(item.supplyPrice) || 0;
-                        return sum + q * sp;
-                      }, 0) || 4733.3333;
-                      const cnyVal = isRatio 
-                        ? ((parseFloat(subItem.amount) || 0) / 100) * computedBase 
-                        : (parseFloat(subItem.amount) || 0);
-
-                      if (cnyVal <= 0) return null;
-
-                      return (
-                        <div key={subItem.id} className="flex items-center justify-between gap-2.5">
-                          <span className="text-slate-500 w-16 text-center select-none py-1.5 px-2 bg-slate-50 border border-slate-200 rounded text-[11px] font-medium shrink-0">
-                            {subItem.type === "现金折扣" ? "商品折扣" : subItem.type}
-                          </span>
-                          
-                          {isRatio ? (
-                            <div className="border border-slate-200 bg-slate-50 text-slate-600 rounded px-2 h-7 flex items-center shrink-0 text-[11px] w-20 justify-center font-medium">
-                              比例 {subItem.amount}%
-                            </div>
-                          ) : (
-                            <div className="border border-slate-200 bg-slate-50 rounded px-2 h-7 flex items-center shrink-0 text-[11px] text-slate-500 w-20 justify-center font-medium">
-                              {subItem.amountType}
-                            </div>
-                          )}
-
-                          <div className="flex border border-slate-200 rounded bg-slate-50 flex-1 overflow-hidden h-7 items-center">
-                            <span className="w-full px-2 text-right text-slate-500 font-mono text-[11px]">
-                              {cnyVal.toFixed(2)}
-                            </span>
-                            <span className="px-2 py-1 bg-slate-50 border-l border-slate-200 text-slate-400 font-bold text-[9px] h-full flex items-center shrink-0">
-                              CNY
-                            </span>
-                          </div>
+                    {/* 累计返利 highlighting (最终修改值) */}
+                    {manualRebateOverride && manualRebateOverride.trim() !== "" ? (
+                      <div className="mt-1 bg-slate-900 text-white rounded-lg p-2.5 flex justify-between items-center shadow-sm text-xs border border-slate-950">
+                        <div className="flex items-center gap-2">
+                          <span className="inline-block w-1.5 h-1.5 rounded-full bg-amber-400"></span>
+                          <span className="font-bold">累计返利:</span>
                         </div>
-                      );
-                    })}
-
-                    {/* 累计返利 highlighting */}
-                    <div className="mt-1 bg-slate-50/50 rounded p-2 flex justify-between items-center text-slate-700 font-semibold border border-slate-100 text-[11px]">
-                      <span>累计返利:</span>
-                      <span className="font-mono text-slate-900 font-bold">
-                        {calculateTotalRebate().toLocaleString("en-US", {
-                          minimumFractionDigits: 2,
-                          maximumFractionDigits: 2,
-                        })}{" "}
-                        CNY
-                      </span>
-                    </div>
+                        <span className="font-mono font-black text-sm tracking-wide text-amber-300">
+                          {getFinalRebateAmount().toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}{" "}
+                          CNY
+                        </span>
+                      </div>
+                    ) : (
+                      <div className="mt-1 bg-slate-50/80 rounded-lg p-2.5 flex justify-between items-center text-slate-700 font-bold border border-slate-200/60 text-[11px]">
+                        <span>累计返利:</span>
+                        <span className="font-mono text-slate-900 font-extrabold text-xs">
+                          {getFinalRebateAmount().toLocaleString("en-US", {
+                            minimumFractionDigits: 2,
+                            maximumFractionDigits: 2,
+                          })}{" "}
+                          CNY
+                        </span>
+                      </div>
+                    )}
 
                     <div className="border-t border-dashed border-slate-200 pt-2.5 mt-2.5 space-y-1.5 text-[11px]">
                       <div className="flex justify-between items-center">
@@ -4102,7 +4223,7 @@ export default function App() {
                           {(() => {
                             const payableTailItem = payableFees.find(pf => pf.payee === "奥特莱斯贸易有限公司" && pf.name === "尾款" && pf.badge === "代付货款");
                             const originalFeePayable = payableTailItem ? (parseFloat(payableTailItem.price) * parseFloat(payableTailItem.qty) || parseFloat(payableTailItem.amount) || 0) : 0;
-                            const totalRebate = calculateTotalRebate();
+                            const totalRebate = getFinalRebateAmount();
                             return Math.min(originalFeePayable, totalRebate).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                           })()} CNY
                         </span>
@@ -4113,7 +4234,7 @@ export default function App() {
                           {(() => {
                             const payableTailItem = payableFees.find(pf => pf.payee === "奥特莱斯贸易有限公司" && pf.name === "尾款" && pf.badge === "代付货款");
                             const originalFeePayable = payableTailItem ? (parseFloat(payableTailItem.price) * parseFloat(payableTailItem.qty) || parseFloat(payableTailItem.amount) || 0) : 0;
-                            const totalRebate = calculateTotalRebate();
+                            const totalRebate = getFinalRebateAmount();
                             return Math.max(0, totalRebate - originalFeePayable).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
                           })()} CNY
                         </span>
@@ -4162,7 +4283,7 @@ export default function App() {
                           <span className="text-[9px] text-slate-400 select-none">▼</span>
                           被冲减
                           <span 
-                            title="当前费用，被其它费用冲减的金额；其它费用的来源可展开明细查看"
+                            title="当前费用，被其它费用冲减的金额"
                             className="inline-flex items-center justify-center w-3.5 h-3.5 rounded-full border border-slate-300 bg-slate-50 text-slate-500 text-[10px] font-bold cursor-help hover:bg-slate-100 transition-colors select-none"
                           >
                             ?
@@ -4181,7 +4302,7 @@ export default function App() {
                               bFee = parseFloat(item?.amount || "0") || 0;
                             }
                             
-                            const totalRebate = calculateTotalRebate();
+                            const totalRebate = getFinalRebateAmount();
                             const otherOffset = receivableFees
                               .filter(rf => rf.payer === "奥特莱斯贸易有限公司" && rf.badge !== "返利")
                               .reduce((sum, rf) => sum + (parseFloat(rf.amount) || 0), 0);
@@ -4195,7 +4316,7 @@ export default function App() {
                       <div className="pl-3.5 border-l border-slate-100 ml-1.5 space-y-2.5 py-0.5">
                         
                         {/* 采购返利 (if it is verified and > 0) */}
-                        {calculateTotalRebate() > 0 && (
+                        {getFinalRebateAmount() > 0 && (
                           <div className="space-y-1.5">
                             <div className="flex justify-between items-center text-[11px] font-semibold text-slate-600 select-none">
                               <span className={`flex items-center gap-1.5 ${isOffsetCancelled ? "line-through opacity-50" : ""}`}>
@@ -4203,42 +4324,8 @@ export default function App() {
                                 采购返利 (AO260521-1)
                               </span>
                               <span className={`font-mono text-slate-600 font-semibold text-[11px] ${isOffsetCancelled ? "line-through opacity-50 text-slate-400" : ""}`}>
-                                {calculateTotalRebate().toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} CNY
+                                {getFinalRebateAmount().toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} CNY
                               </span>
-                            </div>
-
-                            {/* Nesting composition details inside 采购返利 layout, beautifully spaced */}
-                            <div className="pl-4 space-y-1 text-[11px] border-l border-slate-100 ml-1">
-                              {getProductRebate() > 0 && (
-                                <div className="flex justify-between items-center text-slate-400 font-sans font-medium">
-                                  <span>商品返利</span>
-                                  <span className="font-mono text-slate-500">{getProductRebate().toFixed(2)} CNY</span>
-                                </div>
-                              )}
-
-                              {rebates.map((subItem) => {
-                                const isRatio = subItem.amountType === "按比例";
-                                const computedBase = orderItems.reduce((sum, item) => {
-                                  const q = parseFloat(item.quantity) || 0;
-                                  const sp = parseFloat(item.supplyPrice) || 0;
-                                  return sum + q * sp;
-                                }, 0) || 4733.3333;
-                                const cnyVal = isRatio 
-                                  ? ((parseFloat(subItem.amount) || 0) / 100) * computedBase 
-                                  : (parseFloat(subItem.amount) || 0);
-
-                                if (cnyVal <= 0) return null;
-
-                                let displayType = subItem.type;
-                                if (displayType === "现金折扣") displayType = "商品折扣";
-
-                                return (
-                                  <div key={subItem.id} className="flex justify-between items-center text-slate-400 font-sans font-medium">
-                                    <span>{displayType}</span>
-                                    <span className="font-mono text-slate-500">{cnyVal.toFixed(2)} CNY</span>
-                                  </div>
-                                );
-                              })}
                             </div>
                           </div>
                         )}
@@ -4279,7 +4366,7 @@ export default function App() {
                             bFee = parseFloat(item?.amount || "0") || 0;
                           }
                           
-                          const totalRebate = calculateTotalRebate();
+                          const totalRebate = getFinalRebateAmount();
                           const otherOffset = receivableFees
                             .filter(rf => rf.payer === "奥特莱斯贸易有限公司" && rf.badge !== "返利")
                             .reduce((sum, rf) => sum + (parseFloat(rf.amount) || 0), 0);
@@ -4299,6 +4386,10 @@ export default function App() {
             </div>
           )}
         </div>
+        </div>
+        )}
+        
+        {activeTab === '应收费用' && <ReceivableFeesView />}
       </div>
     </div>
   );
